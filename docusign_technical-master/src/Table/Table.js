@@ -18,8 +18,21 @@ const Table = ({ list, bearerToken }) =>
         <div key={item.Name} className='table-row'>
             <span className ="cell">
                 <a onClick = { () =>
-                    axios.get(item.DownloadDocumentHref, { headers: { Authorization: `Bearer ${bearerToken}`, 'Content-Type': 'application/json' } })
-                    .then(result =>{console.log(result.data)})
+                    axios({
+                        url: item.DownloadDocumentHref, 
+                        method: 'GET',
+                        headers: { Authorization: `Bearer ${bearerToken}`, 'Content-Type': 'application/json' },
+                        responseType: 'blob'
+                    })
+                    .then(result =>{
+                        console.log(result.data)
+                        const url = window.URL.createObjectURL(new Blob([result.data]));
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.setAttribute('download', item.Name); //or any other extension
+                        document.body.appendChild(link);
+                        link.click();
+                    })
                 }>{item.Name}</a>
             </span>
             <span className ="cell">

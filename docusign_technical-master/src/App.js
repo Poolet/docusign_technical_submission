@@ -1,6 +1,5 @@
 import './App.css'; //Basic Styling
 import axios from 'axios' //Used for HTTPS requests
-//import { DocList } from './DocList' //Used to retrieve docs
 import Table from './Table' //Used to draw the table to show the files
 import React, { Component } from 'react';
 import {
@@ -46,7 +45,16 @@ class App extends Component {
           }
       }
       )
-        .then(result => this.fetchFiles())
+        .then(result => {
+            this.fetchFiles()
+            const fileName = null;
+            const file = null;
+            const fileType = null;
+            this.setState({fileName})
+            this.setState({file})
+            this.setState({fileType})
+            
+        })
         .catch(error => this.setState({ error }))
     }
   }
@@ -72,7 +80,7 @@ class App extends Component {
   }
 
   handleFileSelected(e) {
-    const fileToUpload = URL.createObjectURL(e.target.files[0]);
+    const fileToUpload = e.target.files[0];
     this.setState({ fileToUpload });
     const fileName = e.target.files[0].name;
     this.setState({ fileName });
@@ -103,9 +111,9 @@ class App extends Component {
         <p>DocuSign Technical Demo</p>
         <div className="interactions">
           <div>
-            <label>Upload a file: <input type="file" onChange={(e) => this.handleFileSelected(e)} />
-            </label>
-            <input class="submit" type="submit" onClick={(e) => this.handleUpload(e)} value="Submit" />
+            <label>Upload a file: </label>
+            <input type="file" onChange={(e) => this.handleFileSelected(e)} />
+            <input className="submit" type="submit" onClick={(e) => this.handleUpload(e)} value="Submit" />
           </div>
           {list.length ? displayedFiles : ""}
         </div>
